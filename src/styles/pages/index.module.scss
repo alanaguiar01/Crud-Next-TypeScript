@@ -1,0 +1,41 @@
+.title{
+    color: white;
+    font-size: 30px;
+    font-family: 'Robot';
+}
+
+.form{
+    background-color: rgba(115, 89, 100, 0.379);
+    backdrop-filter: blur(20px);
+    min-width: 350px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    border-radius: 25px;
+    box-shadow: 10px 5px 5px black;
+    button{
+        width: 180px;
+        height: 40px;
+        font-size: 20px;
+        border-radius: 25px;
+        margin-bottom: 25px;
+    }   
+    .input{
+        margin: 40px 0;
+        gap: 20px;
+        display: flex;
+        flex-direction: column;
+        input{
+            height: 30px;
+            border-radius: 25px;
+            width: 250px;
+        }
+
+    }
+    p{
+        color: white;
+    }
+}
