@@ -1,5 +1,4 @@
 import React, {useContext, useState} from "react";
-import { useRouter } from 'next/router'
 import {AuthContext} from '../context/auth'
 import styles from '../styles/pages/index.module.scss';
 
@@ -7,7 +6,6 @@ export default function Login(){
   const {signIn} = useContext(AuthContext)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const router = useRouter()
 
   async function handleSubmit(){
     const data = {
@@ -15,7 +13,6 @@ export default function Login(){
       password
     }
     await signIn(data)
-    router.push('/home')
   }
 
   return (
@@ -40,8 +37,8 @@ export default function Login(){
         <p>Do you want to register?</p>
         <p>SingUp</p>
       </div>
-  
+
   </>
-    
+
   )
 }

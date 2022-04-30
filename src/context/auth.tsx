@@ -1,6 +1,7 @@
-import {createContext, useState, ReactNode} from "react";
+import {createContext, useState, ReactNode, useEffect} from "react";
 import { api } from "../service/axios";
-import {setCookie} from 'nookies'
+import {setCookie, parseCookies} from 'nookies'
+import Router from "next/router"
 
 type User = {
   email: string;
@@ -29,6 +30,17 @@ export function AuthProvider({children}: AuthProviderProps){
   const [user, setUser] = useState<User>()
   const isAuthentcated = !!user;
 
+  useEffect(()=>{
+    const {'mycrud.token': token} = parseCookies()
+    if(token){
+      api.get('/me').then(response => {
+        const {email, permissions, roles} = response.data
+
+        setUser({email, permissions, roles})
+      })
+    }
+  },[])
+
   async function signIn({email, password}:SignIncredentials){
     try{
       const response = await api.post('sessions',{
@@ -43,7 +55,7 @@ export function AuthProvider({children}: AuthProviderProps){
         path: '/'
       })
       setCookie(null, 'mycrud.refreshtoken', refreshToken, {
-        maxAge: 24 * 60 * 60 * 30, // 30 days
+        maxAge: 24 * 60 * 60 * 1, // 1 day
         path: '/'
       })
 
@@ -52,6 +64,10 @@ export function AuthProvider({children}: AuthProviderProps){
         permissions,
         roles,
       })
+
+      api.defaults.headers['Authorization'] = `Bearer ${token}`
+      Router.push('/home')
+
     }catch(e){
       console.log(e)
     }
