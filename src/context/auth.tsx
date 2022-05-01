@@ -1,6 +1,6 @@
 import {createContext, useState, ReactNode, useEffect} from "react";
 import { api } from "../service/axios";
-import {setCookie, parseCookies} from 'nookies'
+import {setCookie, parseCookies, destroyCookie} from 'nookies'
 import Router from "next/router"
 
 type User = {
@@ -26,6 +26,12 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData)
 
+export function logOut() {
+  destroyCookie(null, 'mycrud.token')
+  destroyCookie(null, 'mycrud.refreshtoken')
+  Router.push('/')
+}
+
 export function AuthProvider({children}: AuthProviderProps){
   const [user, setUser] = useState<User>()
   const isAuthentcated = !!user;
@@ -37,6 +43,8 @@ export function AuthProvider({children}: AuthProviderProps){
         const {email, permissions, roles} = response.data
 
         setUser({email, permissions, roles})
+      }).catch(() => {
+        logOut()
       })
     }
   },[])
